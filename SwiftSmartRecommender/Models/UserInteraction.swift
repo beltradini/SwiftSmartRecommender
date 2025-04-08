@@ -15,5 +15,5 @@ struct UserInteraction: Identifiable, Codable {
 }
 
 enum InteractionType: String, Codable {
-    case viewed, liked, dismissed
+    case viewed, liked, dismissed, shared, purchased
 }

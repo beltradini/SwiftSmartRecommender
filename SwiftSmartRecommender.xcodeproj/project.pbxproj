@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9D7EBE062DA4A87700077D80 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9D7EBDFB2DA4A87700077D80 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		9D677B132DA49DB400BF6616 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -19,6 +23,7 @@
 /* Begin PBXFileReference section */
 		9D0CF4A42DA356D40044859E /* SwiftSmartRecommender.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSmartRecommender.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D677B0F2DA49DB400BF6616 /* SwiftSmartRecommenderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftSmartRecommenderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D7EBDFB2DA4A87700077D80 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -76,6 +81,7 @@
 		9D0CF49B2DA356D40044859E = {
 			isa = PBXGroup;
 			children = (
+				9D7EBDFB2DA4A87700077D80 /* README.md */,
 				9D0CF4A62DA356D40044859E /* SwiftSmartRecommender */,
 				9D677B102DA49DB400BF6616 /* SwiftSmartRecommenderTests */,
 				9D0CF4A52DA356D40044859E /* Products */,
@@ -183,6 +189,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D7EBE062DA4A87700077D80 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

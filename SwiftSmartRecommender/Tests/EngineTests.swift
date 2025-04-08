@@ -43,6 +43,47 @@ final class EngineTests: XCTestCase {
         XCTAssertEqual(scores["item3"], expectedScores["item3"])
     }
     
+    func testAnalyzeInteractionsWithDecay() {
+        // Given
+        let now = Date()
+        let dayInSeconds: TimeInterval = 24 * 60 * 60
+        
+        let decayInteractions = [
+            UserInteraction(id: UUID(), itemID: "item1", timestamp: now.addingTimeInterval(-7 * dayInSeconds), interactionType: .liked),
+            UserInteraction(id: UUID(), itemID: "item1", timestamp: now, interactionType: .liked),
+            UserInteraction(id: UUID(), itemID: "item2", timestamp: now.addingTimeInterval(-1 * dayInSeconds), interactionType: .liked),
+            UserInteraction(id: UUID(), itemID: "item3", timestamp: now.addingTimeInterval(-14 * dayInSeconds), interactionType: .liked)
+        ]
+        
+        // When
+        let scores = analyzer.analyzeInteractionsWithDecay(
+            decayInteractions,
+            decayFactor: 0.9,
+            currentDate: now
+        )
+        
+        // Then
+        // item1: 2.0 (weight) * 0.9^7 (7 days ago) + 2.0 (recent)
+        let olderWeight = 2.0 * pow(0.9, 7)
+        let expectedScore1 = olderWeight + 2.0
+        
+        // item2: 2.0 (weight) * 0.9^1 (1 day ago)
+        let expectedScore2 = 2.0 * pow(0.9, 1)
+        
+        // item3: 2.0 (weight) * 0.9^14 (14 days ago)
+        let expectedScore3 = 2.0 * pow(0.9, 14)
+        
+        XCTAssertEqual(scores["item1"]!, expectedScore1, accuracy: 0.001)
+        XCTAssertEqual(scores["item2"]!, expectedScore2, accuracy: 0.001)
+        XCTAssertEqual(scores["item3"]!, expectedScore3, accuracy: 0.001)
+        
+        // Verify item ranking is correct (most recent should have higher scores)
+        let topItems = analyzer.getTopItems(scores, limit: 3)
+        XCTAssertEqual(topItems[0], "item1")
+        XCTAssertEqual(topItems[1], "item2")
+        XCTAssertEqual(topItems[2], "item3")
+    }
+    
     func testGetTopItems() {
         // Given
         let scores: [String: Double] = [
@@ -96,31 +137,6 @@ final class EngineTests: XCTestCase {
         XCTAssertEqual(normalized["item2"]!, 0.0, accuracy: 0.001)
         XCTAssertEqual(normalized["item3"]!, 0.5, accuracy: 0.001)
         XCTAssertEqual(normalized["item4"]!, 1.0, accuracy: 0.001)
-        }
-        
-        func testAnalyzeInteractionsWithDecay() {
-            // Given
-            let now = Date()
-            let dayInSeconds: TimeInterval = 24 * 60 * 60
-            
-            let decayInteractions = [
-                UserInteraction(id: UUID(), itemID: "item1", timestamp: now.addingTimeInterval(-7 * dayInSeconds), interactionType: .liked),
-                UserInteraction(id: UUID(), itemID: "item1", timestamp: now, interactionType: .liked)
-            ]
-            
-            // When
-            let scores = analyzer.analyzeInteractionsWithDecay(
-                decayInteractions,
-                decayFactor: 0.9,
-                currentDate: now
-            )
-            
-            // Then
-            // 2.0 (weight) * 0.9^7 (7 days ago) + 2.0 (recent)
-            let olderWeight = 2.0 * pow(0.9, 7)
-            let expectedScore = olderWeight + 2.0
-            
-            XCTAssertEqual(scores["item1"]!, expectedScore, accuracy: 0.001)
         }
         
         func testCustomWeights() {
